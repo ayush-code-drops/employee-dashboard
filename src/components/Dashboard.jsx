@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import axios from 'axios'
 import ClipLoader from "react-spinners/ClipLoader";
+import Button from './Button';
+import data from '../data.json'
 function Dashboard() {
+   // console.log('data',data)
   const [name,setName]=useState("")
   const [department,setDepartment]=useState("")
   const [gender,setGender]=useState("")
@@ -13,7 +16,8 @@ function Dashboard() {
     //Indicators
     const [loading, setIsloading] = useState(false);
     const [error, setIsEror] = useState(false)
-    
+    const [temp, setTemp] = useState(1)
+    const [res,filteredRes]=useState(employees)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,11 +51,46 @@ function Dashboard() {
         }).catch((err) => {
           setIsEror(true)
       }) 
-    },[])
+    },[res])
     
     const handleGender = (e) => {
         setGender(e.target.value)
         console.log(e.target.value)
+    }
+    
+    const showAll = () => {
+        
+        
+        setTemp(temp + 1)
+        setEmployees(data)  
+    }
+    const showHR = () => {
+    
+        setTemp(temp + 1)
+        setEmployees(data)
+    }
+    const showFinance = () => {
+        
+    }
+    const showMarketing = () => {
+        
+    }
+    const showIT = () => {
+        
+    }
+
+    const HighToLow = () => {
+        const filteredRes = employees.sort((a, b) => b.salary - a.salary)
+        console.log(filteredRes);
+        setTemp(temp + 1)
+        setEmployees(filteredRes)
+       
+    }
+    const LowToHigh = () => {
+        const filteredRes = employees.sort((a, b) => a.salary - b.salary)
+        console.log(filteredRes);
+        setTemp(temp + 1)
+        setEmployees(filteredRes)
     }
 
   return (
@@ -73,6 +112,19 @@ function Dashboard() {
           </form>
 
           <h3>Employees</h3>
+          <div className={styles.btndiv}>
+              <Button title="Show All Departments" color='red' onClick={showAll}/>
+              <Button title="Show HR" color='teal' onClick={showHR}/>
+              <Button title="Show Marketing" color='brown' onClick={showMarketing}/>
+              <Button title="Show Finance" color='blue' onClick={showFinance}/>
+              <Button title="Show IT" color='purple' onClick={showIT}/>
+          </div>
+
+          <div>
+              Salary Filters: 
+              <Button color='green' onClick={LowToHigh} title='Low to High'/>
+              <Button color='orange' onClick={HighToLow} title='High to Low'/>
+          </div>
           <ClipLoader loading={loading} size={50} color='red'/>
           <table className={styles.table}>
               <thead>
