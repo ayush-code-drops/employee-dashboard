@@ -31,8 +31,8 @@ function Dashboard() {
         }
         
         try {
-            axios.post('https://json-server-deploy-mock.herokuapp.com/employees', payload)
-            setEmployees([...employees,payload])
+            axios.post('https://json-server-deploy-mock.herokuapp.com/employees', payload).then((res)=>setEmployees([...employees,payload]))
+            //setEmployees([...employees,payload])
         } catch (error) {
            setIsEror(true) 
         }
@@ -59,27 +59,54 @@ function Dashboard() {
     }
     
     const showAll = () => {
-        
-        
-        setTemp(temp + 1)
-        setEmployees(data)  
+        setIsloading(true)
+        getData().then((res) => {
+            setTemp(temp + 1)
+            setIsloading(false)
+            setEmployees(res.data)
+        }) 
     }
     const showHR = () => {
+        setIsloading(true)
+        getData().then((res) => {
+            const filteredRes = res.data.filter((em) => em.department == 'HR') 
+            setTemp(temp + 1)
+            setIsloading(false)
+        setEmployees(filteredRes)
+        })
     
-        setTemp(temp + 1)
-        setEmployees(data)
+        
     }
     const showFinance = () => {
-        
+        setIsloading(true)
+        getData().then((res) => {
+            const filteredRes = res.data.filter((em) => em.department == 'Finance')
+            setTemp(temp + 1)
+            setIsloading(false)
+            setEmployees(filteredRes)
+        })
     }
     const showMarketing = () => {
-        
+        setIsloading(true)
+        getData().then((res) => {
+            const filteredRes = res.data.filter((em) => em.department == 'Marketing')
+            setTemp(temp + 1)
+            setIsloading(false)
+            setEmployees(filteredRes)
+        })
     }
     const showIT = () => {
-        
+        setIsloading(true)
+        getData().then((res) => {
+            const filteredRes = res.data.filter((em) => em.department == 'IT')
+            setTemp(temp + 1)
+            setIsloading(false)
+            setEmployees(filteredRes)
+        })
     }
 
     const HighToLow = () => {
+
         const filteredRes = employees.sort((a, b) => b.salary - a.salary)
         console.log(filteredRes);
         setTemp(temp + 1)
